@@ -80,12 +80,12 @@ export default {
     },
     methods: {
         async register() {
-            this.errorMessage = ''; // Reset errors
+            this.errorMessage = '';
 
             await axios.post('/api/register', this.formData)
             .then(response => {
-                console.log(response.data.token);
-                localStorage.setItem('token', response.data.token); // Store token
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('userRole', response.data.role);
                 window.location.href = "/";
             })
             .catch(error => {

@@ -68,12 +68,11 @@ class AuthController extends Controller
             $redirect_to = '/stats';
         }
 
-        return response()->json(['token' => $token, 'redirect_to' => $redirect_to], 200);
+        return response()->json(['token' => $token, 'redirect_to' => $redirect_to, 'role' => $user->role], 200);
     }
 
     public function logout(Request $request)
     {
-        Log::info('hello');
         $user = Auth::user();
 
         $user->tokens()->delete();

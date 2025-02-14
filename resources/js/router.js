@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 
 import Index from './views/Index.vue';
 import Stats from './views/Stats.vue';
+import Users from './views/Users.vue';
 import Login from './views/auth/Login.vue';
 import Register from './views/auth/Register.vue';
 
@@ -16,6 +17,12 @@ const routes = [
         path: '/stats',
         name: 'Stats',
         component: Stats,
+        meta: { requiresAuth: true } 
+    },
+    {
+        path: '/awaiting',
+        name: 'UsersAwaiting',
+        component: Users,
         meta: { requiresAuth: true } 
     },
     {

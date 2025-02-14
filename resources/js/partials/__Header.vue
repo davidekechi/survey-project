@@ -1,7 +1,14 @@
 <template>
     <div class="flex justify-between">
         <h1 class="text-3xl font-bold mb-2">Hello {{ user.name }},</h1>
-        <button class="bg-black text-white px-4 !h-8 rounded text-sm" @click="signOut">Logout</button>
+        <div class="flex">
+                <a v-if="isAdmin && this.$route.name != 'UsersAwaiting'" class="text-sm underline mt-1" href="/awaiting">Awaiting Surveys</a>
+                <div v-if="isAdmin && this.$route.name == 'UsersAwaiting'">
+                    <a v-if="!canViewResults" class="text-sm underline mt-1" href="/">Take Survey</a>
+                    <a v-if="canViewResults" class="text-sm underline mt-1" href="/stats">View Results</a>
+                </div>
+            <button class="bg-black text-white px-4 !h-8 rounded text-sm ml-4" @click="signOut">Logout</button>
+        </div>
     </div>
 </template>
 
@@ -12,6 +19,8 @@ export default {
     data() {
         return {
             user: {},
+            isAdmin: localStorage.getItem('userRole') == 'admin',
+            canViewResults: localStorage.getItem("redirectTo") == '/stats'
         }
     },
     methods: {
@@ -37,6 +46,7 @@ export default {
             })
             .then(response => {
                 localStorage.removeItem("token");
+                localStorage.removeItem('redirectTo');
                 window.location.href = "/login";
             })
             .catch(error => {

@@ -2,7 +2,7 @@
     <section class="px-20 pt-8">
         <Header />
 
-        <div class="w-full bg-white mt-10 lg:px-40">
+        <div v-if="!surveyComplete" class="w-full bg-white mt-10 lg:px-40">
             <h1 class="text-2xl font-bold mb-4">Start the survey</h1>
 
             <div v-if="loader" class="w-full flex justify-center mt-12">
@@ -23,6 +23,15 @@
                 </form>
             </div>
         </div>
+
+        <div v-if="surveyComplete" class="w-full bg-white mt-40 lg:px-40 grid justify-center">
+            <h1 class="text-2xl font-bold mb-4 flex justify-center">Thank you for taking the survey</h1>
+            <h1 class="text-2xl font-bold mb-4 flex justify-center">Your response has been recorded and will be displayed anonymously</h1>
+
+            <div class="grid justify-center mt-12">
+                <a href="/stats"><button type="button" class="bg-black text-white px-4 !h-10 rounded w-fit">View Survey Results</button></a>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -30,6 +39,11 @@
 import Header from '../partials/__Header.vue';
 
 export default {
+    beforeRouteEnter() {
+        if(localStorage.getItem("redirectTo") == '/stats') {
+            window.location.href = "/stats";
+        }
+    },
     name: 'Index',
     components: {
         Header
@@ -40,7 +54,8 @@ export default {
             questions: {},
             formData: {
                 answers: {},
-            }
+            },
+            surveyComplete: false
         }
     },
     methods: {
@@ -80,7 +95,8 @@ export default {
               }
             })
             .then(response => {
-                window.location.href = "/stats";
+                localStorage.setItem('redirectTo', '/stats');
+                this.surveyComplete = true;
             })
             .catch(error => {
                 console.log(error)

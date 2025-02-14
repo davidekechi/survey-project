@@ -58,11 +58,14 @@ export default {
     },
     methods: {
         async login() {
-            this.errorMessage = ''; // Reset errors
+            this.errorMessage = '';
 
             await axios.post('/api/login', this.formData)
             .then(response => {
-                localStorage.setItem('token', response.data.token); // Store token
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('redirectTo', response.data.redirect_to);
+                localStorage.setItem('userRole', response.data.role);
+
                 window.location.href = response.data.redirect_to;
             })
             .catch(error => {
